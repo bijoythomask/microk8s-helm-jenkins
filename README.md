@@ -1,28 +1,28 @@
-# minikube-helm-jenkins
+# Microk8s-helm-jenkins
 
-Verify minikube is running:
+Verify microk8s is running:
 ```
-$ minikube status
-minikube: Running
-cluster: Running
-kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
+$ kubectl cluster-info
+
 ```
 
 
 Create namespace:
 ```
-$ kubectl create -f minikube/jenkins-namespace.yaml
+$ kubectl create -f helm/jenkins-namespace.yaml
 ```
 
 Create persistent volume (folder /data is persistent on minikube)
 ```
-$ kubectl create -f minikube/jenkins-volume.yaml
+$ kubectl create -f helm/jenkins-volume.yaml
 ```
 
 
 Execute helm:
 ```
 $ helm install --name jenkins -f helm/jenkins-values.yaml stable/jenkins --namespace jenkins-project
+
+$ helm upgrade  jenkins -f helm/jenkins-values.yaml --namespace jenkins-project
 ```
 
 
@@ -31,4 +31,12 @@ Check admin password for jenkins:
 $ printf $(kubectl get secret --namespace jenkins-project jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 ```
 
-Full tutorial can be found [here](https://medium.com/@lvthillo/deploy-jenkins-with-dynamic-slaves-in-minikube-8aef5404e9c1).
+# Configure Jenkins for Kubernetes
+
+## Kubernete confugration.
+
+![Alt text](/helm/images/kubernetes-configuration.png?raw=false "Kubernates Configuration")
+
+## Agent Template configuration
+
+![Alt test](helm/images/prod-template.png?row=true "Agent tempate")
